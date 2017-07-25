@@ -1,3 +1,7 @@
+# Sensitivity analysis tool for Brouwer diagrams! By Alexandros Kenich
+# Example usage (to be improved with argument passing):
+# python matplotlib_test.py 
+
 import matplotlib
 matplotlib.use('Agg')
 import numpy as np
