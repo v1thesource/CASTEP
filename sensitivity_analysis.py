@@ -12,14 +12,16 @@ from itertools import izip_longest
 import os
 from functools import wraps
 
+#print(sys.argv[0]) # prints name of script
+#print(sys.argv[1]) # prints argument1
+#print(sys.argv[2]) # prints argument2 (uncomment if needed)
+
 filename = "/Users/ak7310/z/300to2500mono_superfine"
 T0 = 300 # initial temperature in K
 T_increment = 5 # temperature increment in K
 chunk_size = 700 # number of lines per chunk
 plt.figure(figsize=(9,9)) # plot size
 plt.figure().add_axes([0.1, 0.1, 0.6, 0.8])
-
-#plt.ioff() # turn off interactive mode. Don't waste time opening window
 
 def listify(func):
 	@wraps(func)
@@ -48,14 +50,51 @@ def column(lines, yindex):
 
 
 def superplot(batch):
-	lineNames = {0:'mew_e',1:'electrons',2:'holes',3:'VO{2}',4:'VO{1}',5:'VO{0}',6:'VM{-4}',7:'VM{-3}',8:'VM{-2}',9:'VM{-1}',10:'VM{0}',11:'Oi{-2}',12:'Oi{-1}',13:'Oi{0}',14:'Mi{4}',15:'Mi{3}',16:'Mi{2}',17:'Mi{1}',18:'Mi{0}',19:'Stoich',20:'zero'}
-	#plotparams = []
+	lineNames = {
+		0: 'pO2',
+		1: 'mew_e',
+		2: 'electrons',
+		3: 'holes',
+		4: 'VO{2}',
+		5: 'VO{1}',
+		6: 'VO{0}',
+		7: 'VM{-4}',
+		8: 'VM{-3}',
+		9: 'VM{-2}',
+		10:'VM{-1}',
+		11:'VM{0}',
+		12:'Oi{-2}',
+		13:'Oi{-1}',
+		14:'Oi{0}',
+		15:'Mi{4}',
+		16:'Mi{3}',
+		17:'Mi{2}',
+		18:'Mi{1}',
+		19:'Mi{0}',
+		20:'Stoich',
+	}
 	exes = list(column(batch,0))
-	for i in range(1,len(batch[0])-1):
-		plt.plot(exes, list(column(batch,i+1)), label = lineNames[i])
-		#plotparams.append(exes) # puts the x values in
-		#plotparams.append(list(column(batch,i))) # subsequent y value
-	#plt.plot(*plotparams) # *plotparams takes each element
+	plt.plot(exes, list(column(batch, 2), label = lineNames[2] ) # 'electrons'
+	plt.plot(exes, list(column(batch, 3), label = lineNames[3] ) # 'holes'
+	plt.plot(exes, list(column(batch, 4), label = lineNames[4] ) # 'VO{2}'
+	plt.plot(exes, list(column(batch, 5), label = lineNames[5] ) # 'VO{1}'
+	plt.plot(exes, list(column(batch, 6), label = lineNames[6] ) # 'VO{0}'
+	plt.plot(exes, list(column(batch, 7), label = lineNames[7] ) # 'VM{-4}'
+	plt.plot(exes, list(column(batch, 8), label = lineNames[8] ) # 'VM{-3}'
+	plt.plot(exes, list(column(batch, 9), label = lineNames[9] ) # 'VM{-2}'
+	plt.plot(exes, list(column(batch,10), label = lineNames[10]) # 'VM{-1}'
+	plt.plot(exes, list(column(batch,11), label = lineNames[11]) # 'VM{0}'
+	plt.plot(exes, list(column(batch,12), label = lineNames[12]) # 'Oi{-2}'
+	plt.plot(exes, list(column(batch,13), label = lineNames[13]) # 'Oi{-1}'
+	plt.plot(exes, list(column(batch,14), label = lineNames[14]) # 'Oi{0}'
+	plt.plot(exes, list(column(batch,15), label = lineNames[15]) # 'Mi{4}'
+	plt.plot(exes, list(column(batch,16), label = lineNames[16]) # 'Mi{3}'
+	plt.plot(exes, list(column(batch,17), label = lineNames[17]) # 'Mi{2}'
+	plt.plot(exes, list(column(batch,18), label = lineNames[18]) # 'Mi{1}'
+	plt.plot(exes, list(column(batch,19), label = lineNames[19]) # 'Mi{0}'
+	plt.plot(exes, list(column(batch,20), label = lineNames[20]) # 'Stoich'
+	#for i in range(0,len(batch[0])-2): # len(batch[0]) == 2
+	#	plt.plot(exes, list(column(batch,i+2)), label = lineNames[i+2])
 	plt.ylim([-10,0])
 	plt.xlim([-35,0])
 	plt.xlabel("log10(pO2) (atm)")
@@ -88,30 +127,7 @@ def superplot2((batch,plotname)):
 
 plot_all(filename,T0,T_increment,"/tmp/mono_brouwer_superfine")
 
-#group = grouper(line_yielder(filename), chunk_size)
-# currentbatch = next(group)
-# "/tmp/plot"+str(i)
-#superplot(next(group),"Test")
-
-#plt.show()
-
-
-
-#print(currentbatch)
-
-# x=list(column(currentbatch,0))
-# y1=list(column(currentbatch,1))
-# y2=list(column(currentbatch,2))
-
-# print(currentbatch[0])
-# print(x)
-# print(y1)
-# print(len(currentbatch[0]))
 # print(os.getcwd())
-
-#savefig("test1")
-
-# fig1 = plt.figure()
 
 # data = np.random.rand(2, 25)
 # l, = plt.plot([], [], 'r-')
