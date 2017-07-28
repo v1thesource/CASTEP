@@ -38,9 +38,9 @@ def matrix_as_string(filename):
 	return matrix
 
 # Turn string matrix into float matrix
-def floatmatrix(matrix_as_string):
-	for x in range(0,3):
-		for y in range(0,3):
+def floatify(matrix_as_string):
+	for x in range(3):
+		for y in range(3):
 			matrix_as_string[x][y] = float(matrix_as_string[x][y])
 	return matrix_as_string
 
@@ -60,9 +60,9 @@ def lattice_params(matrix_as_float):
 # a.b = |a||b|cos(theta). Yes numpy has np.dot, but I assume you don't have numpy.
 def angles(matrix_as_float):
 	a,b,c = lattice_params(matrix_as_float)
-	dot_bc = sum(matrix_flt[1][i]*matrix_flt[2][i] for i in range(0,3))
-	dot_ac = sum(matrix_flt[0][i]*matrix_flt[2][i] for i in range(0,3))
-	dot_ab = sum(matrix_flt[0][i]*matrix_flt[1][i] for i in range(0,3))
+	dot_bc = sum(matrix_flt[1][i]*matrix_flt[2][i] for i in range(3))
+	dot_ac = sum(matrix_flt[0][i]*matrix_flt[2][i] for i in range(3))
+	dot_ab = sum(matrix_flt[0][i]*matrix_flt[1][i] for i in range(3))
 	alpha_rad = math.acos(dot_bc/(b*c))
 	beta_rad  = math.acos(dot_ac/(a*c))
 	gamma_rad = math.acos(dot_ab/(a*b))
@@ -75,7 +75,7 @@ def angles(matrix_as_float):
 with open(cellfile) as filename:
     matrix_str = matrix_as_string(filename)
     #print matrix_str[0][0] + matrix_str[0][2] # Check if it concatenates 
-    matrix_flt = floatmatrix(matrix_str)
+    matrix_flt = floatify(matrix_str)
     #print matrix_flt[0][0] + matrix_flt[0][2] # Check if it sums
     a,b,c = lattice_params(matrix_flt)
     alpha,beta,gamma = angles(matrix_flt)
