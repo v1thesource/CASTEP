@@ -3,13 +3,13 @@
 # This script runs the Brouwer diagram script at param value $param and the smallest possible $Convergence.
 # It will append the Brouwer diagram data to datadump.txt, and then increment $param by $param_increment
 
-param_name="Temperature"
-param_value="300"
-param_maximum="2500"
+param_name='Temperature'
+param_value='300'
+param_maximum='2500'
 Convergence=1e-40
-param_increment="5"
+param_increment='5'
 
-while [ "$( bc <<< "$param_value <= $param_maximum" ) == "1" ]
+while [ $( bc <<< "$param_value <= $param_maximum" ) == "1" ]
 do
   perl defect_analysis3.pl intrinsic > failure.test
   echo $param_name = $param_value
@@ -20,7 +20,7 @@ do
   Convergence=$(python<<<"print($Convergence*10)")
   else
   cat intrinsic.res >> datadump.txt
-  sed -i .bak "s/$param_name : $param_value/$param_name : $( bc <<< "$param_value + $param_increment" )/g" intrinsic.input
-  param_value=$( bc <<< "$param_value + $param_increment" )
+  sed -i .bak "s/$param_name : $param_value/$param_name : $( bc <<< ($param_value + $param_increment) )/g" intrinsic.input
+  param_value=$( bc <<< ($param_value + $param_increment) )
   fi
 done
