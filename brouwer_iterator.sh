@@ -16,11 +16,11 @@ do
   echo Convergence = $Convergence
   if grep -Fxq "Could not deteremine the Fermi level that gives charge neutrality, recommned you examine your DFT energies" ./failure.test
   then
-  sed -i .bak "s/Convergence : $Convergence/Convergence : $(python<<<"print($Convergence*10)")/g" intrinsic.input
+  sed -i '' "s/Convergence : $Convergence/Convergence : $(python<<<"print($Convergence*10)")/g" intrinsic.input
   Convergence=$(python<<<"print($Convergence*10)")
   else
   cat intrinsic.res >> datadump.txt
-  sed -i .bak "s/$param_name : $param_value/$param_name : $( bc <<< ($param_value + $param_increment) )/g" intrinsic.input
-  param_value=$( bc <<< ($param_value + $param_increment) )
+  sed -i '' "s/$param_name : $param_value/$param_name : $( bc <<< "$param_value + $param_increment" )/g" intrinsic.input
+  param_value=$( bc <<< "$param_value + $param_increment" )
   fi
 done
