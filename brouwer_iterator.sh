@@ -1,17 +1,18 @@
 #!/bin/bash
 
-# This script runs the Brouwer diagram script at temperature $temp and the smallest possible $Convergence.
-# It will append the Brouwer diagram data to datadump.txt, and then increment $temp by $temp_increment
+# This script runs the Brouwer diagram script at param value $param and the smallest possible $Convergence.
+# It will append the Brouwer diagram data to datadump.txt, and then increment $param by $param_increment
 
-temp="300"
-temp_maximum="2500"
+param_name="Temperature"
+param_value="300"
+param_maximum="2500"
 Convergence=1e-40
-temp_increment="5"
+param_increment="5"
 
-while [ "$(bc <<< "$temp < $temp_maximum") == "1" ]
+while [ "$(bc <<< "$param_value <= $param_maximum") == "1" ]
 do
   perl defect_analysis3.pl intrinsic > failure.test
-  echo Temperature = $temp
+  echo $param_name = $param_value
   echo Convergence = $Convergence
   if grep -Fxq "Could not deteremine the Fermi level that gives charge neutrality, recommned you examine your DFT energies" ./failure.test
   then
@@ -19,7 +20,7 @@ do
   Convergence=$(python<<<"print($Convergence*10)")
   else
   cat intrinsic.res >> datadump.txt
-  sed -i -e "s/Temperature : $temp/Temperature : $( bc <<< "$temp + $temp_increment" )/g" intrinsic.input
-  temp=$( bc <<< "$temp + $temp_increment" )
+  sed -i -e "s/$param_name : $param_value/$param_name : $( bc <<< "$param_value + $param_increment" )/g" intrinsic.input
+  param_value=$( bc <<< "$param_value + $param_increment" )
   fi
 done
