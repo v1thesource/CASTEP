@@ -9,18 +9,18 @@ param_maximum="2500"
 Convergence=1e-40
 param_increment="5"
 
-while [ "$(bc <<< "$param_value <= $param_maximum") == "1" ]
+while [ "$( bc <<< "$param_value <= $param_maximum" ) == "1" ]
 do
   perl defect_analysis3.pl intrinsic > failure.test
   echo $param_name = $param_value
   echo Convergence = $Convergence
   if grep -Fxq "Could not deteremine the Fermi level that gives charge neutrality, recommned you examine your DFT energies" ./failure.test
   then
-  sed -i -e "s/Convergence : $Convergence/Convergence : $(python<<<"print($Convergence*10)")/g" intrinsic.input
+  sed -i .bak "s/Convergence : $Convergence/Convergence : $(python<<<"print($Convergence*10)")/g" intrinsic.input
   Convergence=$(python<<<"print($Convergence*10)")
   else
   cat intrinsic.res >> datadump.txt
-  sed -i -e "s/$param_name : $param_value/$param_name : $( bc <<< "$param_value + $param_increment" )/g" intrinsic.input
+  sed -i .bak "s/$param_name : $param_value/$param_name : $( bc <<< "$param_value + $param_increment" )/g" intrinsic.input
   param_value=$( bc <<< "$param_value + $param_increment" )
   fi
 done
