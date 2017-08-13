@@ -10,24 +10,19 @@ import matplotlib.animation as animation
 from matplotlib.pyplot import savefig
 from itertools import izip_longest 
 import os
+import sys
 from functools import wraps
 
 #print(sys.argv[0]) # prints name of script
 #print(sys.argv[1]) # prints argument1
 #print(sys.argv[2]) # prints argument2 (uncomment if needed)
 
-filename = "/Users/ak7310/z/300to2500mono_superfine"
-T0 = 300 # initial temperature in K
-T_increment = 5 # temperature increment in K
-chunk_size = 700 # number of lines per chunk
-plt.figure(figsize=(9,9)) # plot size
-plt.figure().add_axes([0.1, 0.1, 0.6, 0.8])
-
-def listify(func):
-	@wraps(func)
-	def new_func(*args, **kwargs):
-		return list(func(*args, **kwargs))
-	return new_func
+filename = "/Users/ak7310/z/300to2500mono_superfine" # Location of data file
+T0 = 300 # Initial param value (temperature/bandgap/concentration/etc)
+T_increment = 5 # Parameter increment 
+chunk_size = 700 # Number of lines per chunk in data file
+plt.figure(figsize=(9,9)) # Plot size
+plt.figure().add_axes([0.1, 0.1, 0.6, 0.8]) # Plot axes, usually a decent range
 
 
 def line_yielder(filename):
@@ -113,22 +108,10 @@ def plot_all(filename,startTemp,tempIncrement,plotname):
 		savefig(plotFilename,bbox_inches='tight')
 		plt.clf() # clear figure or you'll get 182392u394 lines
 
-
-from multiprocessing import Pool
-
-def plot_all2(filename):
-	p = Pool(3)
-	p.map(superplot2, ((batch, "/tmp/plot"+str(i)) for i, batch in enumerate(grouper(line_yielder(filename), chunk_size))))
-
-
-def superplot2((batch,plotname)):
-	return superplot(batch,plotname)
-
-
+		
 plot_all(filename,T0,T_increment,"/tmp/mono_brouwer_superfine")
 
 # print(os.getcwd())
-
 # data = np.random.rand(2, 25)
 # l, = plt.plot([], [], 'r-')
 # plt.xlim(0, 1)
@@ -137,22 +120,29 @@ plot_all(filename,T0,T_increment,"/tmp/mono_brouwer_superfine")
 # plt.title('test')
 # line_ani = animation.FuncAnimation(fig1, update_line, 25, fargs=(data, l),
 #                                    interval=50, blit=True)
-
 # # To save the animation, use the command: line_ani.save('lines.mp4')
-
 # savefig(fname, dpi=None, facecolor='w', edgecolor='w',
 #        orientation='portrait', papertype=None, format=None,
 #        transparent=False, bbox_inches=None, pad_inches=0.1,
 #        frameon=None)
-
 # x = np.arange(-9, 10)
 # y = np.arange(-9, 10).reshape(-1, 1)
 # base = np.hypot(x, y)
 # ims = []
 # for add in np.arange(15):
 #     ims.append((plt.pcolor(x, y, base + add, norm=plt.Normalize(0, 30)),))
-
 # im_ani = animation.ArtistAnimation(fig2, ims, interval=50, repeat_delay=3000,
 #                                    blit=True)
 # # To save this second animation with some metadata, use the following command:
 # # im_ani.save('im.mp4', metadata={'artist':'Guido'})
+#def listify(func):
+#	@wraps(func)
+#	def new_func(*args, **kwargs):
+#		return list(func(*args, **kwargs))
+#	return new_func
+#from multiprocessing import Pool
+#def plot_all2(filename):
+#	p = Pool(3)
+#	p.map(superplot2, ((batch, "/tmp/plot"+str(i)) for i, batch in enumerate(grouper(line_yielder(filename), chunk_size))))
+#def superplot2((batch,plotname)):
+#	return superplot(batch,plotname)
